@@ -1,14 +1,17 @@
 /*global google*/
 
 import React, { Component } from 'react';
-import Map from './components/Map';
 import axios from 'axios';
-import logo from './d2d.svg';
-import Moment from 'react-moment';
+
+import Sidebar from './components/Sidebar';
+import Map from './components/Map';
 import './styles/App.css';
 
 class App extends Component {
 
+
+  // Initializing our Component with Default data
+  // Otherwise we get Undefineds
   constructor(props) {
     super(props)
     // this.endpoint = 'https://door2door-vehicles.herokuapp.com/vehicles'
@@ -16,22 +19,41 @@ class App extends Component {
     this.state = { markers: [], filteredMarkers: [] }
   }
 
+
+  // This is the simplest solution for the problem:
+  // Each request is 2~5kb in size, which is not too much performant
+  // in the long run.
+  // But it's fast enough to handle it with no problems
   updateRetrieval() {
     this.interval = setInterval(this.retrieveVehicles.bind(this), 3000)
   }
 
 
+  // We use the computeHeading method from Google Maps to Calculate the
+  // heading based on the 1-3 points we have.
+  // We also use this to rotate the navigation icon (be it a car or something like it)
   calculateBearings(location) {
     if (location[0] && location[1] &&
       typeof(location[0].lat) !== 'undefined') {
 
         var from = new google.maps.LatLng(location[0].lat, location[0].lng);
-        var to = new google.maps.LatLng(location[1].lat, location[1].lng);
+        var to = new google.maps.LatLng(location[3].lat, location[3].lng);
 
         return google.maps.geometry.spherical.computeHeading(from, to)
       }
     }
 
+
+
+    // I tried fetch, but AXIOS felt better
+    // And for some reason, Fetch is always triggering
+    // CORS errors even with Cross-origin allowed for every resource
+
+
+    // This method fetches the API
+    // And save the markers in the current state
+    // We also filter those that are on boundary or not
+    // Which we could have done here, but Node.
     retrieveVehicles() {
 
       axios.get(this.endpoint)
@@ -44,47 +66,38 @@ class App extends Component {
         })
 
         this.setState({ markers: markers });
-        this.setState({ filteredMarkers: markers.filter(marker => marker.locations[0] )})
+        this.setState({ filteredMarkers: markers.filter(marker => marker.locations[0].on_boundary )})
       }).catch(err => {
         console.log(err);
       })
     }
 
+
+    // We didnt get to use This
+    // But, good practices if we develop further
     componentWillUnmount() {
       clearInterval(this.interval);
     }
 
+
+    // We only fetch when the component is ready.
     componentDidMount() {
       this.retrieveVehicles()
       this.updateRetrieval()
     }
 
-
+    // The APP component itself.
     render() {
       return (
         <div className="content">
-          <Map
-          markers={ this.state.markers }
-          loadingElement={<div className="map"/>}
-          containerElement={<div style={{ height: `100vh`, width: `80%` }} />}
-          mapElement={<div style={{ height: `100%` }} />}
-          />
-          <div className="sidebar">
-            <div className="logo"><img src={logo} alt="Door2Door.io"/></div>
-            <h2 className="has-text-centered has-text-weight-bold is-size-5">
-              { this.state.filteredMarkers.length } Active Vehicles
-            </h2>
-            <ul>
-            { this.state.filteredMarkers.map( marker => (
-              <li key={marker.id}>
-              <h5 className="is-size-6 has-text-weight-bold">{ marker.id }</h5>
-              <em>Last seen &nbsp;
-                <Moment fromNow>{ marker.locations[0] && marker.locations[0].at }</Moment>
-              </em>
-              </li>
-            ))}
-            </ul>
-          </div>
+        <Map
+        isMarkerShown={true}
+        markers={ this.state.markers }
+        loadingElement={<div className="map"/>}
+        containerElement={<div style={{ height: `100vh`, width: `80%` }} />}
+        mapElement={<div style={{ height: `100%` }} />}
+        />
+        <Sidebar markers={this.state.markers} filteredMarkers={this.state.filteredMarkers}/>
         </div>
       );
     }

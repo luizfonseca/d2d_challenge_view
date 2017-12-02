@@ -1,0 +1,44 @@
+
+.sidebar {
+  width: 20%;
+  height: 100vh;
+  overflow: auto;
+  padding: 1em 0;
+}
+
+.sidebar .logo {
+  padding: 1em;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 99;
+  text-align: center;
+  box-shadow: 0px 1px 2px #dedede;
+}
+
+.sidebar img {
+  width: 70%;
+}
+.sidebar h2 {
+  padding: 1em 0;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  margin-left: 0;
+}
+
+.sidebar ul em {
+  font-size: .8em;
+}
+
+
+.sidebar ul li {
+  padding: 1.5em;
+  opacity: .4;
+}
+
+
+.sidebar ul li:nth-child(odd) {
+  background: #f2f2f2;
+}

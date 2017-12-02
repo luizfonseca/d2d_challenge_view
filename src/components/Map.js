@@ -1,34 +1,63 @@
 /*global google*/
 
 import React from 'react';
-import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import { withGoogleMap, GoogleMap, Marker, Circle } from "react-google-maps"
 import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClusterer";
 
+import mapStyle from '../map.json';
+import pin from '../images/pind2d.png';
 import '../styles/Map.css';
 
 
+// Saving the central point (aka City point)
+const officeCoords = { lat: 52.53, lng: 13.403 }
+const officeRadius = 3500 // and the radius we want.
+
+
+// Using the HOC way of setting up the Component
+// It's probably reaching its limits of component size.
+// So if we add more, maybe its better to create smaller ones.
 const Map = withGoogleMap((props) =>
   <GoogleMap
-    defaultZoom={14}
-    defaultCenter={{ lat: 52.53, lng: 13.403 }}
-  >
-    {props.isMarkerShown && <Marker position={{ lat: -34.397, lng: 150.644 }} />}
-
+    defaultOptions={{ styles: mapStyle }}
+    defaultZoom={13}
+    defaultCenter={officeCoords}
+    >
+    {props.isMarkerShown &&
+      <Marker
+      position={officeCoords}
+      icon={pin} />}
+    <Circle
+      radius={officeRadius}
+      options={{ fillColor: "#dedede", strokeColor: "#fff" }}
+      center={officeCoords}
+    />
     <MarkerClusterer
           averageCenter
           enableRetinaIcons
           gridSize={60}
         >
-          { props.markers.map(marker => ( marker.locations[0] &&
+          { props.markers.map(marker => ( (marker.locations[0] && marker.locations[0].on_boundary) &&
             <Marker
               key={marker.id}
-              defaultIcon={{ scale: 4, strokeWeight: 8, path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, rotation: (marker.bearing - 180) }}
+              icon={{ scale: 3, fillColor: '#333', strokeColor: '#333', strokeWeight: 5, path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW, rotation: (marker.bearing) }}
               bearing={marker.bearing}
               position={{ lat: marker.locations[0] && marker.locations[0].lat, lng: marker.locations[0] && marker.locations[0].lng }}
-            />
+            >
+            </Marker>
           ))}
         </MarkerClusterer>
   </GoogleMap>
 )
 
 export default Map;
+
+
+// This is optional and I find it useful,
+// but too many lines are on the vision.
+// We can include it inside the Marker component
+
+// { marker.locations[0] &&
+//   <Polyline path={marker.locations}
+//             offset="100%"
+//             options={{ strokeColor: "#000", fillOpacity: '0.3', fillColor: "#000" }}/> }
