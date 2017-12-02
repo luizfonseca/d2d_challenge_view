@@ -66,7 +66,8 @@ class App extends Component {
         })
 
         this.setState({ markers: markers });
-        this.setState({ filteredMarkers: markers.filter(marker => marker.locations[0].on_boundary )})
+        this.setState({ filteredMarkers: markers.filter(marker =>
+          marker.locations[0] && marker.locations[0].on_boundary )})
       }).catch(err => {
         console.log(err);
       })
