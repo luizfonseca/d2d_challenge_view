@@ -34,10 +34,10 @@ class App extends Component {
   // We also use this to rotate the navigation icon (be it a car or something like it)
   calculateBearings(location) {
     if (location[0] && location[1] &&
-      typeof(location[0].lat) !== 'undefined') {
+      typeof(location[3].lat) !== 'undefined') {
 
         var from = new google.maps.LatLng(location[0].lat, location[0].lng);
-        var to = new google.maps.LatLng(location[3].lat, location[3].lng);
+        var to = new google.maps.LatLng(location[2].lat, location[2].lng);
 
         return google.maps.geometry.spherical.computeHeading(from, to)
       }
