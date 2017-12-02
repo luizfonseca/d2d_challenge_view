@@ -15,7 +15,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     // this.endpoint = 'https://door2door-vehicles.herokuapp.com/vehicles'
-    this.endpoint = 'http://localhost:3000/vehicles'
+    this.endpoint = 'https://door2door-vehicles.herokuapp.com'
     this.state = { markers: [], filteredMarkers: [] }
   }
 
