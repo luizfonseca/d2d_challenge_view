@@ -4,6 +4,9 @@ FROM node:carbon
 RUN mkdir -p /src/app
 WORKDIR /src/app
 
+
+ARG REACT_APP_API_URL
+
 # to make npm test run only once non-interactively
 ENV CI=true
 
