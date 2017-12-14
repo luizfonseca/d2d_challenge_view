@@ -11,9 +11,9 @@ import '../styles/Map.css';
 
 // Saving the central point (aka City point)
 const officeCoords = [
-  { lat: 52.53, lng: 13.403 },
-  { lat: 52.50, lng: 13.228 },
-  { lat: 52.45, lng: 13.391 }
+  { lat: 52.53, lng: 13.403 }, // Door 2 Door
+  { lat: 52.50, lng: 13.228 }, // Pichelsberg
+  { lat: 52.45, lng: 13.391 }  // Tempelhof
 ]
 const officeRadius = 3500 // and the radius we want.
 
@@ -28,7 +28,6 @@ const Map = withGoogleMap((props) =>
     defaultCenter={officeCoords[0]}
     >
     { officeCoords.map(coords => (
-
         <Marker
           position={coords}
           icon={pin}>

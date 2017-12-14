@@ -14,7 +14,7 @@ class Sidebar extends Component {
       <div className="sidebar">
         <div className="logo"><img src={logo} alt="Door2Door.io"/></div>
         <h2 className="has-text-centered has-text-weight-bold is-size-5">
-          { this.props.filteredMarkers.length } Vehicles in city radius
+          { this.props.filteredMarkers.length } Vehicles in Coord radius
         </h2>
         <h4 className="has-text-centered has-text-weight-bold is-size-7">
           { this.props.markers.length } active Vehicles in total
