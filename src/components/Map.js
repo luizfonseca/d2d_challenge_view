@@ -10,7 +10,11 @@ import '../styles/Map.css';
 
 
 // Saving the central point (aka City point)
-const officeCoords = { lat: 52.53, lng: 13.403 }
+const officeCoords = [
+  { lat: 52.53, lng: 13.403 },
+  { lat: 52.50, lng: 13.228 },
+  { lat: 52.45, lng: 13.391 }
+]
 const officeRadius = 3500 // and the radius we want.
 
 
@@ -20,18 +24,22 @@ const officeRadius = 3500 // and the radius we want.
 const Map = withGoogleMap((props) =>
   <GoogleMap
     defaultOptions={{ styles: mapStyle }}
-    defaultZoom={13}
-    defaultCenter={officeCoords}
+    defaultZoom={12}
+    defaultCenter={officeCoords[0]}
     >
-    {props.isMarkerShown &&
-      <Marker
-      position={officeCoords}
-      icon={pin} />}
-    <Circle
-      radius={officeRadius}
-      options={{ fillColor: "#dedede", strokeColor: "#fff" }}
-      center={officeCoords}
-    />
+    { officeCoords.map(coords => (
+
+        <Marker
+          position={coords}
+          icon={pin}>
+
+         <Circle
+          radius={officeRadius}
+          options={{ fillColor: "#dedede", strokeColor: "#fff" }}
+          center={coords}
+        ></Circle>
+        </Marker>
+    ))}
     <MarkerClusterer
           averageCenter
           enableRetinaIcons
